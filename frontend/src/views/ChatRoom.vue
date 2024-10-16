@@ -1,7 +1,20 @@
 <template>
-  <div>
-    <h1>Forum n°1</h1>
-    <p>Regarde la console pour voir les événements de connexion.</p>
+  <div id="app">
+    <div>
+      <h2>Chat Simple</h2>
+      <input
+        v-model="newMessage"
+        placeholder="Tapez votre message ici"
+        @keyup.enter="sendMessage"
+      />
+      <button @click="sendMessage">Envoyer</button>
+    </div>
+    <div>
+      <h3>Messages envoyés :</h3>
+      <ul>
+        <li v-for="(message, index) in messages" :key="index">{{ message }}</li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -9,42 +22,43 @@
 import { io } from 'socket.io-client';
 
 export default {
-  name: 'ChatRoom',
+  name: 'App',
   data() {
     return {
       socket: null,
-      room: 'room1', // Nom de la room à rejoindre
+      newMessage: '', 
+      messages: [] 
     };
   },
   mounted() {
-    // Se connecter au serveur Socket.IO sur localhost:3000
     this.socket = io('http://localhost:3000');
 
-    // Gérer les événements de connexion et déconnexion
     this.socket.on('connect', () => {
       console.log('Connecté au serveur Socket.IO');
-      // Rejoindre automatiquement la room "room1"
-      this.socket.emit('joinRoom', { room: this.room });
     });
 
     this.socket.on('disconnect', () => {
       console.log('Déconnecté du serveur Socket.IO');
     });
 
-    // Écouter les messages de la room
-    this.socket.on('message', (message) => {
-      console.log(`Message from room: ${message}`);
+    this.socket.on('message', (msg) => {
+      console.log('Message reçu:', msg);
+      this.messages.push(msg);
     });
   },
+  methods: {
+    sendMessage() {
+      if (this.newMessage.trim()) {
+        this.socket.emit('message', this.newMessage);
+        this.messages.push(`Vous : ${this.newMessage}`);
+        this.newMessage = '';
+      }
+    }
+  },
   beforeUnmount() {
-    // Déconnecter proprement lorsque le composant est détruit
     if (this.socket) {
       this.socket.disconnect();
     }
   }
 };
 </script>
-
-<style scoped>
-/* Styles spécifiques à la page */
-</style>

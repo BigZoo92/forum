@@ -29,6 +29,11 @@ io.on('connection', (socket) => {
     socket.to(room).emit('message', `A new user has joined the room: ${room}`);
   });
 
+  socket.on('message', (msg) => {
+    console.log("Message reçu du client :", msg);
+    io.emit('message', msg);
+  });
+
   socket.on('disconnect', () => {
     console.log('User disconnected');
   });
