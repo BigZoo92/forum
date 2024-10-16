@@ -1,7 +1,6 @@
 <template>
   <div>
-    <h1>À propos</h1>
-    <p>Bienvenue sur la page À propos !</p>
+    <h1>Forum n°1</h1>
   </div>
 </template>
 
