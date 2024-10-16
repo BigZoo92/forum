@@ -4,7 +4,6 @@ export async function fetchUsers() {
     if (!response.ok) {
       throw new Error('Erreur lors de la récupération des utilisateurs');
     }
-    console.log(response.json())
     return await response.json();
 
   } catch (error) {
