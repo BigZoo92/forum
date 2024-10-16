@@ -1,8 +1,6 @@
-const API_URL = 'http://localhost:3000/api/messages';
-
-export async function fetchMessages() {
+export async function fetchMessagesByForum(forumId) {
   try {
-    const response = await fetch(API_URL);
+    const response = await fetch(`http://localhost:3000/api/messages/${forumId}`);
     if (!response.ok) {
       throw new Error('Erreur lors de la récupération des messages');
     }
