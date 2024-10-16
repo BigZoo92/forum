@@ -1,17 +1,24 @@
 <template>
-  <h1>Forum n°1</h1>
-  <div id="content">  
-    <div id="room_list">
-      <ul>
-        <li v-for="(room, index) in rooms" :key="index" :class="'room-' + index">
-          <a :href="'/chat-room/' +(index+1)">{{room.name}}</a>
-        </li> 
-      </ul>
+  <div id="room_nav">
+    <h1>Forum n°1</h1> 
+    <ul>
+      <li v-for="(room, index) in rooms" :key="index" :class="'room-' + index">
+        <a class="rooms" :href="'/chat-room/' +(index+1)">{{room.name}}</a>
+      </li> 
+    </ul>
+  </div>
+  <div class="main">
+    <div class="message__container">
+      <div class="message__infos-user">
+        <p class="message__infos-user__name">User#974456</p>
+        <p class="message__infos-user__date">2 hours ago</p>
+      </div>
+      <p class="message__text">Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte.</p>
     </div>
     <div class="message__container">
       <div class="message__infos-user">
-          <p class="message__infos-user__name">User#974456</p>
-          <p class="message__infos-user__date">2 hours ago</p>
+        <p class="message__infos-user__name">User#974456</p>
+        <p class="message__infos-user__date">2 hours ago</p>
       </div>
       <p class="message__text">Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte.</p>
     </div>
@@ -19,7 +26,7 @@
         <input type="text" id="message" name="name" v-model="message" required placeholder="Écrivez votre message...">
         <button type="submit">Soumettre</button>
     </form>
-  </div>
+  </div> 
 </template>
 
 <script>
@@ -43,37 +50,69 @@ export default {
 </script>
 
 <style scoped>
-
-#app {
-  width: 100%;
+#room_nav {
   height: 100%;
+  width: 250px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  overflow-x: hidden;
+  padding-top: 60px;
+  background-color: #1E252B;
+  color: white;
+  border-radius: 10px;
 }
 
-#content {
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  grid-template-rows: 1fr;
-  width: 100%;
-  height: 100%;
-}
-#room_list {
-  display: flex;
-  height: 100%;
-  width: 100%;
-  border-right: solid  black 2px ;
+#room_nav h1, ul {
+  text-align: center;
+  list-style: none;
+  padding: 0;
+
 }
 
+#room_nav h1 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 30px;
+  color: white; 
+}
+#room_nav li {
+  margin-bottom: 20px;
+  padding: 10px;
+  transition: background-color 0.3s ease;
+}
+
+#room_nav li:hover {
+  background-color: #292945; 
+  border-radius: 10px;
+}
+
+.rooms {
+  font-size: 18px;
+  text-decoration: none;
+  color: #b1b1b1;
+}
+
+.rooms:hover {
+  color: white;
+}
+
+.main {
+  margin-left: 250px;
+}
 .message__container {
     margin-top: 36px;
-    background-color: #262D34;
+    background-color: #262D34;;
     display: flex;
     flex-direction: column;
     gap: 24px;
     padding: 24px;
     width: 1200px;
-    border-radius: 6px;
+    border-radius: 12px;
     margin-left: auto;
     margin-right: auto;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 @media (max-width: 1280px) {
@@ -85,17 +124,19 @@ export default {
 .message__infos-user {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .message__infos-user__name {
     font-size: 18px;
-    font-weight: 400;
+    font-weight: 600;
+    color: #ffffff;
 }
 
 .message__infos-user__date {
     font-size: 16px;
-    font-weight: 300;
-    color: #C5D0E6;
+    font-weight: 400;
+    color: #b1b1b1;
 }
 
 @media (max-width: 768px) {
@@ -105,30 +146,61 @@ export default {
 }
 
 .message__text {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 400;
-    line-height: 1.5;
+    line-height: 1.6;
     color: #F7F7F7;
 }
 
 @media (max-width: 768px) {
     .message__text {
-        font-size: 16px;
-    
+        font-size: 14px;
     }
 }
 
 #messageForm {
-  
-  grid-column: 2 / 3;
-  grid-row: 2 / 3;
-  margin-left: 5%;
-  margin-right: 5%;
-  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1E252B;
+  border-radius: 10px;
+  padding: 10px 20px;
+  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  width: calc(100% - 250px);
+  left: 250px;
+  bottom: 0;
+  z-index: 1;
+  margin: 0;
 }
 
 #message {
-  width: 80%;
-  height: 30px;
+  flex-grow: 1;
+  background-color: #262D34;
+  border: none;
+  border-radius: 6px;
+  padding: 12px;
+  color: white;
+  font-size: 16px;
+}
+
+#message::placeholder {
+  color: #8a8a9b; 
+}
+
+#messageForm button {
+  background-color: #ff652f;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 20px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  margin-left: 15px;
+  transition: background-color 0.3s ease;
+}
+
+#messageForm button:hover {
+  background-color: #e65523;
 }
 </style>
