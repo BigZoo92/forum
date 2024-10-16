@@ -1,34 +1,39 @@
-const { log } = require('console');
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
-const cors = require('cors'); // Importer le middleware CORS
-
+const cors = require('cors');
 
 const app = express();
+
+// Utiliser le middleware CORS
+app.use(cors());
+
 const server = http.createServer(app);
-
-app.use(cors({
-  origin: 'http://localhost:8080', // Autorise uniquement localhost:8080
-  methods: ['GET', 'POST']
-}));
-
-// Configurer Socket.IO avec CORS
 const io = socketIo(server, {
   cors: {
-    origin: "http://localhost:8080", // Autoriser localhost:8080
+    origin: "http://localhost:8080", // Remplacez par l'origine de votre client
     methods: ["GET", "POST"]
   }
 });
-// Connexion à MongoDB (par exemple)
-app.get('/', (req,res) => {
-  res.send('hello world')
-})
+
+app.get('/', (req, res) => {
+  res.send('hello world');
+});
 
 io.on('connection', (socket) => {
-  console.log("yes anthonin")
-})
+  console.log('User connected');
+  
+  socket.on('joinRoom', ({ room }) => {
+    socket.join(room);
+    console.log(`User joined room: ${room}`);
+    socket.to(room).emit('message', `A new user has joined the room: ${room}`);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+  });
+});
 
 server.listen(3000, () => {
-  console.log("listening to 3000")
-})
+  console.log("listening to 3000");
+});

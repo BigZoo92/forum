@@ -13,6 +13,7 @@ export default {
   data() {
     return {
       socket: null,
+      room: 'room1', // Nom de la room à rejoindre
     };
   },
   mounted() {
@@ -22,12 +23,17 @@ export default {
     // Gérer les événements de connexion et déconnexion
     this.socket.on('connect', () => {
       console.log('Connecté au serveur Socket.IO');
-      // Émettre un événement de connexion
-      this.socket.emit('connection', { message: 'User connected' });
+      // Rejoindre automatiquement la room "room1"
+      this.socket.emit('joinRoom', { room: this.room });
     });
 
     this.socket.on('disconnect', () => {
       console.log('Déconnecté du serveur Socket.IO');
+    });
+
+    // Écouter les messages de la room
+    this.socket.on('message', (message) => {
+      console.log(`Message from room: ${message}`);
     });
   },
   beforeUnmount() {
