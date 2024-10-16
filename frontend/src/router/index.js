@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import ChatRoom from '../views/ChatRoom.vue'
 
 const routes = [
-  { path: '/chat-room', name: 'ChatRoom', component: ChatRoom }
+  { path: '/chat-room/1', name: 'ChatRoom', component: ChatRoom }
 ]
 
 const router = createRouter({
