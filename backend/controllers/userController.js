@@ -17,7 +17,7 @@ const users = [
       return res.status(404).json({ error: 'Message non trouvé' });
     }
   
-    const user = users.find(user => user.id === message.userId);
+    const user = users.find(user => user.id === message.userId);  
     if (!user) {
       return res.status(404).json({ error: 'Utilisateur non trouvé' });
     }
