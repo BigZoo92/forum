@@ -1,30 +1,30 @@
 <template>
   <div id="app">
-    <h1>Vue.js Modal Form Example</h1>
-    <!-- <button @click="showModal = true">Open Modal</button>
-
-    <MyModal v-if="showModal" @close="showModal = false" @submit="handleFormSubmit" /> -->
+    <h1>Navbar</h1>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-// import MyModal from './components/MyModal.vue';
+import { fetchMessagesByForum } from '../services/messageService';
 
-// export default {
-//   name: 'App',
-//   components: {
-//     MyModal
-//   },
-//   data() {
-//     return {
-//       showModal: false
-//     };
-//   },
-//   methods: {
-//     handleFormSubmit(formData) {
-//       console.log("Form submitted:", formData);
-//       this.showModal = false; // Close the modal after submission
-//     }
-//   }
-// };
+export default {
+  name: 'App',
+  data() {
+    return {
+      messages: [],
+      error: null
+    };
+  },
+  async mounted() {
+    try {
+      const data = await fetchMessagesByForum(1);
+      this.messages = data;
+      console.log(data)
+    } catch (err) {
+      this.error = 'Erreur lors du chargement des messages';
+      console.error(err);
+    }
+  }
+}
 </script>

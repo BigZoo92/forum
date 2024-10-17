@@ -1,6 +1,6 @@
 <template>
-  <div id="indexroom">
-    <h1>Vue.js Modal Form Example</h1>
+  <div id="app">
+    <h1>Les forums</h1>
     <button @click="showModal = true">Add a forum</button>
 
     <!-- Modal component -->
@@ -12,7 +12,7 @@
 import MyModal from '../components/MyModal.vue';
 
 export default {
-  name: 'IndexRoom',
+  name: 'App',
   components: {
     MyModal
   },
