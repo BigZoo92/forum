@@ -45,10 +45,6 @@
 
 export default {
   name: 'ChatRoom',
-  mounted() {
-    document.body.classList.add('bodyClass');
-    this.scrollToBottom();
-  },
   unmounted() {
     document.body.classList.remove('bodyClass');
   },
@@ -61,6 +57,8 @@ export default {
   },
   mounted() {
     document.body.classList.add('bodyClass');
+    this.scrollToBottom();
+
     // this.socket = io('http://localhost:3000');
 
     // this.socket.on('connect', () => {
@@ -76,9 +74,6 @@ export default {
     //   this.messages.push(msg);
     // });
   },
-  unmounted() {
-    document.body.classList.remove('bodyClass');
-  },
   methods: {
     sendMessage() {
       if (this.newMessage.trim()) {
@@ -91,11 +86,12 @@ export default {
       const messagesDiv = this.$refs.messages;
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
     },
-  },
+  
   beforeUnmount() {
     if (this.socket) {
       this.socket.disconnect();
-    },
+    }
+  },
 
     toggleMenu() {
         const menu = document.querySelector('#room_nav');
