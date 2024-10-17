@@ -14,7 +14,7 @@
           <label for="message">Type your message here:</label>
           <textarea v-model="formData.message" required></textarea>        </div>
 
-        <button type="submit">Submit</button>
+        <button class="button" type="submit">Submit</button>
         <button type="button" @click="$emit('close')">Close</button>
       </form>
     </div>
