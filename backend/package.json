@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node index.js",
+    "build": "echo \"No build step needed for this project\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
