@@ -1,26 +1,63 @@
-const messages = [
-    { id: 1, forumId: 1, userId: 1, date: '2024-10-16', content: 'Message One Content' },
-    { id: 2, forumId: 1, userId: 2, date: '2024-10-16', content: 'Message Two Content' },
-    { id: 3, forumId: 2, userId: 1, date: '2024-10-17', content: 'Message Three Content' },
-  ];
-  
-  const users = [
-    { id: 1, email: 'user1@example.com', name: 'User One' },
-    { id: 2, email: 'user2@example.com', name: 'User Two' }
-  ];
-  
-  exports.getMessagesByForum = (req, res) => {
+const axios = require('axios');
+
+const directusApiUrl = 'https://directus-ucmn.onrender.com/items/forum_messages';
+const jwtToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1YzdiNmJlLTVlYTktNGQ4YS05ODExLWZjOTY1Y2U3Y2QyYyIsInJvbGUiOiIxZDliYmYzNC04Njg0LTQ5MjctODdlYS0yOGVmMWU2ZTAzYzQiLCJhcHBfYWNjZXNzIjp0cnVlLCJhZG1pbl9hY2Nlc3MiOnRydWUsImlhdCI6MTcyOTE1OTUwNCwiZXhwIjoxNzI5MTYwNDA0LCJpc3MiOiJkaXJlY3R1cyJ9.KCKxbJDr6KgfXZ-9M8tRVJ3A_CDVFuY9rHyhriB1Lkk';
+
+exports.getMessagesByForum = async (req, res) => {
+  try {
     const forumId = parseInt(req.params.forumId);
-  
-    // Filtrer les messages par forumId
-    const forumMessages = messages
-      .filter(message => message.forumId === forumId)
-      .map(message => {
-        // Ajouter les informations utilisateur au message
-        const user = users.find(user => user.id === message.userId);
-        return { ...message, user };
-      });
-  
+
+    const response = await axios.get(directusApiUrl, {
+      headers: {
+        Authorization: `Bearer ${jwtToken}`
+      }
+    });
+
+    const messages = response.data.data;
+
+    const forumMessages = messages.filter(message => message.room === forumId);
+
     res.json(forumMessages);
-  };
-  
+  } catch (error) {
+    console.error('Error fetching messages from Directus:', error);
+    res.status(500).json({ error: 'Failed to fetch messages' });
+  }
+};
+
+exports.createMessage = async (req, res) => {
+  try {
+    const response = await axios.post(directusApiUrl, req.body, {
+      headers: { Authorization: `Bearer ${jwtToken}` }
+    });
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error creating message:', error);
+    res.status(500).json({ error: 'Failed to create message' });
+  }
+};
+
+exports.updateMessage = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const response = await axios.patch(`${directusApiUrl}/${id}`, req.body, {
+      headers: { Authorization: `Bearer ${jwtToken}` }
+    });
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error updating message:', error);
+    res.status(500).json({ error: 'Failed to update message' });
+  }
+};
+
+exports.deleteMessage = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const response = await axios.delete(`${directusApiUrl}/${id}`, {
+      headers: { Authorization: `Bearer ${jwtToken}` }
+    });
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error deleting message:', error);
+    res.status(500).json({ error: 'Failed to delete message' });
+  }
+};

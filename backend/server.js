@@ -13,7 +13,7 @@ app.use(cors());
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: "http://localhost:8080",
+    origin: ["http://localhost:8080","http://localhost:8081","https://forum-1-x9pn.onrender.com"],
     methods: ["GET", "POST"]
   }
 
