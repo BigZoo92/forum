@@ -22,22 +22,21 @@ const io = socketIo(server, {
 // Configurer Nodemailer
 const transporter = nodemailer.createTransport({
   host: "smtp-mail.outlook.com",
-  port: 587, // Utiliser le port 587 pour TLS (STARTTLS)
-  secure: false, // Ne pas utiliser SSL directement (secure doit être false pour le port 587)
+  port: 587,
+  secure: false, // Utilisez false pour STARTTLS
   auth: {
-    user: 'rejoinsMaSuperRoom@outlook.com', // Ton email Outlook
-    pass: 'azerty123!' // Le mot de passe de ton compte Outlook
+    user: 'rejoinsMaSuperRoom@outlook.com',
+    pass: 'yvqwsy©uaztqcyjgp'
   },
-  tls: {
-    ciphers: 'SSLv3',
-    rejectUnauthorized: false // Autoriser les certificats non reconnus
-  }
+  connectionTimeout: 10000, // Délai d'attente de 10 secondes
+
+  logger: true, // Active les logs
+  debug: true   // Active le mode debug
 });
 
 app.post('/invite', async (req, res) => {
   const { email, room } = req.body;
   const inviteLink = `http://localhost:8080/join?room=${room}`;
-
   const mailOptions = {
     from: 'rejoinsMaSuperRoom@outlook.com',
     to: email,
