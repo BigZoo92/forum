@@ -1,5 +1,6 @@
 <template>
   <div id="room_nav">
+    <button class="burger" aria-label="Toggle menu" @click="toggleMenu">&#9776;</button>
     <h1>Forum n°1</h1> 
     <ul>
       <li v-for="(room, index) in rooms" :key="index" :class="'room-' + index">
@@ -7,8 +8,8 @@
       </li> 
     </ul>
   </div>
-  <div class="main" ref="messages">
-    <div id="scroll">
+  <div class="main">
+    <div id="scroll" ref="messages">
       <div class="message__container">
       <div class="message__infos-user">
         <p class="message__infos-user__name">User#974456</p>
@@ -46,10 +47,9 @@ export default {
   mounted() {
     document.body.classList.add('bodyClass');
     this.scrollToBottom();
-    this.checkScrollDivs(); 
   },
   unmounted() {
-    document.body.classList.remove('bodyClass')
+    document.body.classList.remove('bodyClass');
   },
   data() {
     return {
@@ -67,9 +67,28 @@ export default {
   
     scrollToBottom() {
       const messagesDiv = this.$refs.messages;
-      console.log('scrollHeight:', messagesDiv.scrollHeight, 'scrollTop:', messagesDiv.scrollTop);
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
     },
+
+    toggleMenu() {
+        const menu = document.querySelector('#room_nav');
+        const menu_ul = document.querySelector('#room_nav ul');
+        const button = document.querySelector('.burger');
+
+      if (menu.style.width === '100%' && menu.style.width === '100%' ) {
+        button.innerHTML = '&#9776;';
+        menu.style.width='0';
+        menu.style.height='0';
+        menu_ul.style.width='0';
+        menu_ul.style.height='0';
+      } else {
+        button.innerHTML = '&#10006;';
+        menu.style.width='100%';
+        menu.style.height='100%';
+        menu_ul.style.width='auto';
+        menu_ul.style.height='auto';
+      }
+    }
   }
 }
 </script>
@@ -87,10 +106,9 @@ html, .bodyClass {
 }
 
 #room_nav {
-  height: 100%;
-  width: 250px;
+  
   position: fixed;
-  z-index: 1;
+  z-index: 2;
   top: 0;
   left: 0;
   overflow-x: hidden;
@@ -98,13 +116,15 @@ html, .bodyClass {
   background-color: #1E252B;
   color: white;
   border-radius: 10px;
+  transition: width 0.3s ease;
+  height: 100%;
+  width: 250px;
 }
 
 #room_nav h1, ul {
   text-align: center;
   list-style: none;
   padding: 0;
-
 }
 
 #room_nav h1 {
@@ -114,11 +134,23 @@ html, .bodyClass {
   color: white; 
 }
 
+#room_nav .burger {
+  font-size: 24px;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin: 10px;
+  position: fixed;
+  top: 0;
+  margin-top: 10px;
+  z-index: 2;
+}
+
 #room_nav ul {
   padding: 10px;
   margin: 10px;
   border-radius: 10px;
-
   background-color: #262D34;
 }
 #room_nav li {
@@ -149,16 +181,28 @@ html, .bodyClass {
     flex-direction: column;
     gap: 24px;
     padding: 24px;
-    width: 1200px;
+    width: auto;
     border-radius: 12px;
     margin-left: auto;
     margin-right: auto;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    overflow-y: none;
+
 }
 
 @media (max-width: 1280px) {
     .message__container {
         width: 90%;
+    }
+    #room_nav {
+      height: 100%;
+      width: 250px;
+    }
+    .burger {
+      display: none;
+    }
+    #room_nav ul {
+      width: 100%;
     }
 }
 
@@ -181,9 +225,58 @@ html, .bodyClass {
 }
 
 @media (max-width: 768px) {
-    .message__infos-user__date {
-        font-size: 14px;
-    }
+  .message__infos-user__date {
+      font-size: 14px;
+  }
+
+  .message__text {
+      font-size: 14px;
+  }
+
+  #room_nav {
+    width: 0;
+    height: 0;
+  }
+
+  .bodyClass {
+    margin-left: 0;
+  }
+
+  .main {
+    overflow-x: none;
+    overflow-y: none;
+
+  }
+
+  #scroll {
+    padding: 10px;
+  }
+
+  .message__container {
+    width: auto;
+  }
+
+  #messageForm {
+    width: 93%;
+    padding: 10px 10px;
+    left: 0;
+  }
+  
+  .burger {
+    display: block;
+  }
+}
+
+@media (min-width: 768px) {
+  #messageForm {
+    left: 250px;
+    width: calc(100% - 307px);
+  }
+
+  .burger {
+    display: none;
+  }
+ 
 }
 
 .message__text {
@@ -193,26 +286,18 @@ html, .bodyClass {
     color: #F7F7F7;
 }
 
-@media (max-width: 768px) {
-    .message__text {
-        font-size: 14px;
-    }
-}
-
 #messageForm {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: #1E252B;
   border-radius: 10px;
-  padding: 10px 20px;
   box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
   position: fixed;
-  width: calc(100% - 307px);
-  left: 250px;
   bottom: 0;
   z-index: 1;
   margin: 0;
+  padding: 10px 20px;
 }
 
 #message {
@@ -246,13 +331,23 @@ html, .bodyClass {
 }
 
 .main {
-
   height: 625px;
-  overflow-y: auto;
+  width: auto;
   padding-bottom: 80px;
+  padding: 0 5%;
 }
 
 #scroll {
-  padding: 10px;
+  padding: 100px 0;
+  width: auto;
+  height: auto;
+}
+
+.hidden {
+    display: none;
+}
+
+.visible {
+    display: block;
 }
 </style>
