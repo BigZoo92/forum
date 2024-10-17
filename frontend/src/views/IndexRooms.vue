@@ -5,15 +5,18 @@
 
     <!-- Modal component -->
     <MyModal v-if="showModal" @close="showModal = false" @submit="handleFormSubmit" />
+    <TitleRoom />
   </div>
 </template>
 
 <script>
 import MyModal from '../components/MyModal.vue';
+import TitleRoom from '../components/TitleRoom.vue';
 
 export default {
   name: 'App',
   components: {
+    TitleRoom,
     MyModal
   },
   data() {
@@ -29,3 +32,18 @@ export default {
   }
 };
 </script>
+<style scoped>
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Source Sans Pro', sans-serif;
+  color: #F7F7F7;
+
+}
+
+body {
+  background-color: #1E252B;
+}
+</style>
