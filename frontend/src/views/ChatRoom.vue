@@ -66,8 +66,6 @@ export default {
     },
   
     scrollToBottom() {
-      // const messagesDiv = this.$refs.messages;
-      // messagesDiv.scrollTop = messagesDiv.scrollHeight;
       const messagesDiv = this.$refs.messages;
       console.log('scrollHeight:', messagesDiv.scrollHeight, 'scrollTop:', messagesDiv.scrollTop);
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
