@@ -63,5 +63,24 @@
     font-weight: 500;
     background: #FF6934;
 }
+
+.button {
+  height: fit-content;
+  padding: 12px 24px;
+  border:0;
+  background-color: #FF6934;
+  color: #fff;
+  border-radius: 6px;
+  width: fit-content;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: 500;
+  &:hover {
+      background-color: rgb(255, 111, 71);
+  }
+  &:active {
+      background-color: #FF5B2C;
+  }
+}
   </style>
   
