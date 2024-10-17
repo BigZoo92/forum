@@ -25,8 +25,9 @@ exports.getMessagesByForum = async (req, res) => {
 };
 
 exports.createMessage = async (req, res) => {
+  const { content, room } = req.body;
   try {
-    const response = await axios.post(directusApiUrl, req.body, {
+    const response = await axios.post(messageApiUrl, { content, room }, {
       headers: { Authorization: `Bearer ${jwtToken}` }
     });
     res.json(response.data);

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { fetchMessagesByForum } from '../services/messageService';
+import { fetchUsersById } from '../services/userService';
 
 export default {
   name: 'App',
@@ -17,9 +17,9 @@ export default {
   },
   async mounted() {
     try {
-      const data = await fetchMessagesByForum(1);
+      const data = await fetchUsersById("2b2c28f8-5d2f-4d40-8eb1-ac9b02ef1454");
       this.messages = data;
-      console.log(data)
+      console.log(this.messages)
     } catch (err) {
       this.error = 'Erreur lors du chargement des messages';
       console.error(err);
