@@ -7,21 +7,31 @@
       </li> 
     </ul>
   </div>
-  <div class="main">
-    <div class="message__container">
+  <div class="main" ref="messages">
+    <div id="scroll">
+      <div class="message__container">
       <div class="message__infos-user">
         <p class="message__infos-user__name">User#974456</p>
         <p class="message__infos-user__date">2 hours ago</p>
       </div>
       <p class="message__text">Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte.</p>
-    </div>
-    <div class="message__container">
-      <div class="message__infos-user">
-        <p class="message__infos-user__name">User#974456</p>
-        <p class="message__infos-user__date">2 hours ago</p>
       </div>
-      <p class="message__text">Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte.</p>
+      <div class="message__container">
+        <div class="message__infos-user">
+          <p class="message__infos-user__name">User#974456</p>
+          <p class="message__infos-user__date">2 hours ago</p>
+        </div>
+        <p class="message__text">Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte.</p>
+      </div>
+      <div class="message__container">
+        <div class="message__infos-user">
+          <p class="message__infos-user__name">User#974456</p>
+          <p class="message__infos-user__date">2 hours ago</p>
+        </div>
+        <p class="message__text">Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte.</p>
+      </div>
     </div>
+    
     <form id="messageForm" @submit.prevent="handleSubmit">
         <input type="text" id="message" name="name" v-model="message" required placeholder="Écrivez votre message...">
         <button type="submit">Soumettre</button>
@@ -34,6 +44,14 @@
 
 export default {
   name: 'ChatRoom',
+  mounted() {
+    document.body.classList.add('bodyClass');
+    this.scrollToBottom();
+    this.checkScrollDivs(); 
+  },
+  unmounted() {
+    document.body.classList.remove('bodyClass')
+  },
   data() {
     return {
       socket: null,
@@ -68,17 +86,35 @@ export default {
         this.messages.push(`Vous : ${this.newMessage}`);
         this.newMessage = '';
       }
-    }
+    },
+    scrollToBottom() {
+      // const messagesDiv = this.$refs.messages;
+      // messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      const messagesDiv = this.$refs.messages;
+      console.log('scrollHeight:', messagesDiv.scrollHeight, 'scrollTop:', messagesDiv.scrollTop);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    },
   },
   beforeUnmount() {
     if (this.socket) {
       this.socket.disconnect();
-    }
+    },
   }
 }
 </script>
 
-<style scoped>
+<style>
+
+html, .bodyClass {
+  height: 100%;
+  margin: 0;
+}
+
+.bodyClass {
+  background-color: #1E252b;
+  margin-left: 250px;
+}
+
 #room_nav {
   height: 100%;
   width: 250px;
@@ -106,6 +142,14 @@ export default {
   margin-bottom: 30px;
   color: white; 
 }
+
+#room_nav ul {
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+
+  background-color: #262D34;
+}
 #room_nav li {
   margin-bottom: 20px;
   padding: 10px;
@@ -127,11 +171,8 @@ export default {
   color: white;
 }
 
-.main {
-  margin-left: 250px;
-}
 .message__container {
-    margin-top: 36px;
+    margin-top: 15px;
     background-color: #262D34;;
     display: flex;
     flex-direction: column;
@@ -196,7 +237,7 @@ export default {
   padding: 10px 20px;
   box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
   position: fixed;
-  width: calc(100% - 250px);
+  width: calc(100% - 307px);
   left: 250px;
   bottom: 0;
   z-index: 1;
@@ -231,5 +272,16 @@ export default {
 
 #messageForm button:hover {
   background-color: #e65523;
+}
+
+.main {
+
+  height: 625px;
+  overflow-y: auto;
+  padding-bottom: 80px;
+}
+
+#scroll {
+  padding: 10px;
 }
 </style>
