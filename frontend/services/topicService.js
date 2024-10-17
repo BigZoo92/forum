@@ -1,10 +1,10 @@
-const API_URL = 'http://localhost:3000/api/topics';
+const backendUrl = process.env.VUE_APP_BACKEND_URL;
 
-export async function fetchTopics() {
+export async function fetchRooms() {
   try {
-    const response = await fetch(API_URL);
+    const response = await fetch(`${backendUrl}api/rooms`);
     if (!response.ok) {
-      throw new Error('Erreur lors de la récupération des topics');
+      throw new Error('Erreur lors de la récupération des rooms');
     }
     return await response.json();
   } catch (error) {
@@ -13,15 +13,15 @@ export async function fetchTopics() {
   }
 }
 
-export async function fetchTopicById(topicId) {
-    try {
-      const response = await fetch(`${API_URL}/${topicId}`);
-      if (!response.ok) {
-        throw new Error('Erreur lors de la récupération des topics');
-      }
-      return await response.json();
-    } catch (error) {
-      console.error('Erreur :', error);
-      throw error;
+export async function fetchRoomsById(topicId) {
+  try {
+    const response = await fetch(`${backendUrl}api/rooms/${topicId}`);
+    if (!response.ok) {
+      throw new Error('Erreur lors de la récupération des rooms');
     }
+    return await response.json();
+  } catch (error) {
+    console.error('Erreur :', error);
+    throw error;
   }
+}

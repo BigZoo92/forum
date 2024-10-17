@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const topicController = require('../controllers/topicController');
+const roomController = require('../controllers/roomController');
 
-router.get('/topics', topicController.getTopics);
-router.get('/topic/:topicId', topicController.getTopicsById);
+router.get('/rooms', roomController.getRooms);
+router.get('/rooms/:id', roomController.getRoomById);
+router.post('/rooms', roomController.createRoom);
+router.delete('/rooms/:id', roomController.deleteRoom);
 
 module.exports = router;
