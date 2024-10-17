@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <h1>Les forums</h1>
-    <button @click="showModal = true">Add a forum</button>
+    <button class="button" @click="showModal = true">Add a forum</button>
 
     <!-- Modal component -->
     <MyModal v-if="showModal" @close="showModal = false" @submit="handleFormSubmit" />
