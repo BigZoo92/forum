@@ -4,6 +4,7 @@ const http = require('http');
 const socketIo = require('socket.io');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
+const path = require('path');
 
 const app = express();
 
@@ -12,12 +13,7 @@ app.use(cors());
 app.use(express.json()); // Middleware pour parser le corps des requêtes JSON
 
 const server = http.createServer(app);
-const io = socketIo(server, {
-  cors: {
-    origin: "http://localhost:8080", // Remplacez par l'origine de votre client
-    methods: ["GET", "POST"]
-  }
-});
+const io = socketIo(server);
 
 // Configurer Nodemailer
 const transporter = nodemailer.createTransport({
@@ -26,17 +22,16 @@ const transporter = nodemailer.createTransport({
   secure: false, // Utilisez false pour STARTTLS
   auth: {
     user: 'rejoinsMaSuperRoom@outlook.com',
-    pass: 'yvqwsy©uaztqcyjgp'
+    pass: process.env.EMAIL_APP_PASSWORD // Stocke le mot de passe dans un fichier .env pour plus de sécurité
   },
   connectionTimeout: 10000, // Délai d'attente de 10 secondes
-
   logger: true, // Active les logs
   debug: true   // Active le mode debug
 });
 
 app.post('/invite', async (req, res) => {
   const { email, room } = req.body;
-  const inviteLink = `http://localhost:8080/join?room=${room}`;
+  const inviteLink = `http://localhost:3000/join?room=${room}`; // Change le port vers 3000, car frontend et backend sont unifiés maintenant
   const mailOptions = {
     from: 'rejoinsMaSuperRoom@outlook.com',
     to: email,
@@ -54,6 +49,17 @@ app.post('/invite', async (req, res) => {
   }
 });
 
+// Servir les fichiers statiques du frontend (dist)
+
+const frontendDir = path.join(__dirname, 'public');
+
+app.use('/', express.static(frontendDir))
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(frontendDir, 'index.html'));
+});
+
+// WebSocket avec Socket.io
 io.on('connection', (socket) => {
   console.log('User connected');
   
@@ -73,6 +79,7 @@ io.on('connection', (socket) => {
   });
 });
 
+// Démarrage du serveur
 server.listen(3000, () => {
   console.log("Server listening on port 3000");
 });
