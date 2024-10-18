@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 const directusApiUrl = 'https://directus-ucmn.onrender.com/items/forum_messages';
-const jwtToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1YzdiNmJlLTVlYTktNGQ4YS05ODExLWZjOTY1Y2U3Y2QyYyIsInJvbGUiOiIxZDliYmYzNC04Njg0LTQ5MjctODdlYS0yOGVmMWU2ZTAzYzQiLCJhcHBfYWNjZXNzIjp0cnVlLCJhZG1pbl9hY2Nlc3MiOnRydWUsImlhdCI6MTcyOTE1OTUwNCwiZXhwIjoxNzI5MTYwNDA0LCJpc3MiOiJkaXJlY3R1cyJ9.KCKxbJDr6KgfXZ-9M8tRVJ3A_CDVFuY9rHyhriB1Lkk';
+const jwtToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1YzdiNmJlLTVlYTktNGQ4YS05ODExLWZjOTY1Y2U3Y2QyYyIsInJvbGUiOiIxZDliYmYzNC04Njg0LTQ5MjctODdlYS0yOGVmMWU2ZTAzYzQiLCJhcHBfYWNjZXNzIjp0cnVlLCJhZG1pbl9hY2Nlc3MiOnRydWUsImlhdCI6MTcyOTI1OTcyMywiZXhwIjoxNzI5Nzc4MTIzLCJpc3MiOiJkaXJlY3R1cyJ9.4M3SoZXrwBrdv8cqh_4AJSmqg9_9gojK2wMWkfkEULQ';
 
 exports.getMessagesByForum = async (req, res) => {
   try {
