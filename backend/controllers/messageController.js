@@ -1,12 +1,12 @@
 const axios = require('axios');
 
 const directusApiUrl = 'https://directus-ucmn.onrender.com/items/forum_messages';
-const jwtToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1YzdiNmJlLTVlYTktNGQ4YS05ODExLWZjOTY1Y2U3Y2QyYyIsInJvbGUiOiIxZDliYmYzNC04Njg0LTQ5MjctODdlYS0yOGVmMWU2ZTAzYzQiLCJhcHBfYWNjZXNzIjp0cnVlLCJhZG1pbl9hY2Nlc3MiOnRydWUsImlhdCI6MTcyOTE1OTUwNCwiZXhwIjoxNzI5MTYwNDA0LCJpc3MiOiJkaXJlY3R1cyJ9.KCKxbJDr6KgfXZ-9M8tRVJ3A_CDVFuY9rHyhriB1Lkk';
 
 exports.getMessagesByForum = async (req, res) => {
   try {
     const forumId = parseInt(req.params.forumId);
 
+    const jwtToken = await getAccessToken();
     const response = await axios.get(directusApiUrl, {
       headers: {
         Authorization: `Bearer ${jwtToken}`
@@ -26,6 +26,7 @@ exports.getMessagesByForum = async (req, res) => {
 
 exports.createMessage = async (req, res) => {
   const { content, room } = req.body;
+  const jwtToken = await getAccessToken();
   try {
     const response = await axios.post(messageApiUrl, { content, room }, {
       headers: { Authorization: `Bearer ${jwtToken}` }
@@ -39,6 +40,7 @@ exports.createMessage = async (req, res) => {
 
 exports.updateMessage = async (req, res) => {
   const { id } = req.params;
+  const jwtToken = await getAccessToken();
   try {
     const response = await axios.patch(`${directusApiUrl}/${id}`, req.body, {
       headers: { Authorization: `Bearer ${jwtToken}` }
@@ -52,6 +54,7 @@ exports.updateMessage = async (req, res) => {
 
 exports.deleteMessage = async (req, res) => {
   const { id } = req.params;
+  const jwtToken = await getAccessToken();
   try {
     const response = await axios.delete(`${directusApiUrl}/${id}`, {
       headers: { Authorization: `Bearer ${jwtToken}` }
@@ -62,3 +65,33 @@ exports.deleteMessage = async (req, res) => {
     res.status(500).json({ error: 'Failed to delete message' });
   }
 };
+
+const fetch = require('node-fetch');
+
+async function getAccessToken() {
+    const url = 'https://directus-ucmn.onrender.com/auth/login';
+    const body = {
+        email: "test@test.fr",
+        password: "azerty"
+    };
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body),
+        });
+
+        const data = await response.json();
+        console.log(data)
+        if (response.ok) {
+            return data.data.access_token;
+        } else {
+            throw new Error(`Error: ${data}`);
+        }
+    } catch (error) {
+        console.error('Error fetching the access token:', error);
+    }
+}
