@@ -1,6 +1,6 @@
-const fetch = require('node-fetch');
-
 async function getAccessToken() {
+    const fetch = require('node-fetch');
+
     const url = 'https://directus-ucmn.onrender.com/auth/login';
     const body = {
         email: "test@test.fr",
@@ -28,4 +28,4 @@ async function getAccessToken() {
     }
 }
 
-export const jwtToken = await getAccessToken()
+module.exports = { getAccessToken };

@@ -1,3 +1,9 @@
+const nodemailer = require('nodemailer');
+const fs = require('fs');
+const path = require('path'); 
+const jwt = require('jsonwebtoken');
+const { jwtToken } = require('../../constant');
+
 const users = [
     { id: 1, email: 'user1@example.com', name: 'User One' },
     { id: 2, email: 'user2@example.com', name: 'User Two' }
@@ -33,4 +39,48 @@ const users = [
     }
     res.json(users);
   };
+
+
+
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true, 
+  auth: {
+    user: process.env.MAIL,
+    pass: process.env.MDP_SECRET,
+  },
+});
+
+
+exports.sendInvitationEmail = async(user1, user2, topicLink) => {
+  const htmlTemplatePath = path.resolve(__dirname, '../templates/mail/mail.html');
+  const htmlTemplate = fs.readFileSync(htmlTemplatePath, 'utf8');
   
+  const emailHTML = htmlTemplate
+    .replace('{{user1}}', user1)
+    .replace('{{user2}}', user2)
+    .replace('{{topicLink}}', topicLink);
+  
+  await transporter.sendMail({
+    from: process.env.MAIL,
+    to: user2,
+    subject: `${user1} has invited you to a topic`,
+    html: emailHTML,
+  });
+}
+
+module.exports = { sendInvitationEmail };
+
+  
+exports.sendInvite = async (req, res) => {
+  const { user1, user2, topicLink } = req.body;
+
+  try {
+    await sendInvitationEmail(user1, user2, topicLink);
+    res.status(200).json({ message: 'Invitation sent successfully' });
+  } catch (error) {
+    console.error('Error sending invitation email:', error);
+    res.status(500).json({ error: 'Failed to send invitation email' });
+  }
+};
