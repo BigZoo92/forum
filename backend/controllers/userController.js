@@ -1,8 +1,6 @@
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 const path = require('path'); 
-const jwt = require('jsonwebtoken');
-const { jwtToken } = require('../../constant');
 
 const users = [
     { id: 1, email: 'user1@example.com', name: 'User One' },
