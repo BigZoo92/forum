@@ -41,7 +41,8 @@
 </template>
 
 <script>
-// import { io } from 'socket.io-client';
+import { io } from 'socket.io-client';
+import { fetchRooms } from '../../services/topicService.js';
 
 export default {
   name: 'ChatRoom',
@@ -51,28 +52,49 @@ export default {
   data() {
     return {
       socket: null,
+      room_id: null,
       newMessage: '', 
       messages: [] 
     };
+  },
+  beforeMount(){
+    const response = fetchRooms();
+
+    response.then(result => {
+      console.log(result.name)
+    });
   },
   mounted() {
     document.body.classList.add('bodyClass');
     this.scrollToBottom();
 
-    // this.socket = io('http://localhost:3000');
+    // TODO DECOMMENT
+      // const room_id = this.$route.params.id ;
+      // TODO DECOMMENT
 
-    // this.socket.on('connect', () => {
-    //   console.log('Connecté au serveur Socket.IO');
-    // });
+      // TODO REMOVE
+      const room_id = "1";
 
-    // this.socket.on('disconnect', () => {
-    //   console.log('Déconnecté du serveur Socket.IO');
-    // });
+      this.room_id = room_id
+      // TODO REMOVE
 
-    // this.socket.on('message', (msg) => {
-    //   console.log('Message reçu:', msg);
-    //   this.messages.push(msg);
-    // });
+
+    // TODO: REMOVE
+    this.socket = io('http://localhost:3000');
+
+    this.socket.on('connect', () => {
+      console.log('Connecté au serveur Socket.IO');
+    });
+
+    this.socket.on('disconnect', () => {
+      console.log('Déconnecté du serveur Socket.IO');
+    });
+
+    this.socket.on('message', (msg) => {
+      console.log('Message reçu:', msg);
+      this.messages.push(msg);
+    });
+    // TODO: REMOVE
   },
   methods: {
     sendMessage() {
