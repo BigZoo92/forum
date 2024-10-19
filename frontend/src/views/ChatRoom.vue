@@ -12,39 +12,42 @@
   </div>
   <div class="main">
     <div id="scroll" ref="messages">
-      <div class="message__container">
-      <div class="message__infos-user">
-        <p class="message__infos-user__name">User#974456</p>
-        <p class="message__infos-user__date">2 hours ago</p>
-      </div>
-      <p class="message__text">Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte.</p>
-      </div>
-      <div class="message__container">
+      {{ messages }}
+        <!-- <div class="message__container">
         <div class="message__infos-user">
           <p class="message__infos-user__name">User#974456</p>
           <p class="message__infos-user__date">2 hours ago</p>
         </div>
         <p class="message__text">Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte.</p>
-      </div>
-      <div class="message__container">
-        <div class="message__infos-user">
-          <p class="message__infos-user__name">User#974456</p>
-          <p class="message__infos-user__date">2 hours ago</p>
         </div>
-        <p class="message__text">Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte.</p>
-      </div>
+        <div class="message__container">
+          <div class="message__infos-user">
+            <p class="message__infos-user__name">User#974456</p>
+            <p class="message__infos-user__date">2 hours ago</p>
+          </div>
+          <p class="message__text">Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte.</p>
+        </div>
+        <div class="message__container">
+          <div class="message__infos-user">
+            <p class="message__infos-user__name">User#974456</p>
+            <p class="message__infos-user__date">2 hours ago</p>
+          </div>
+          <p class="message__text">Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte.</p>
+        </div> -->
     </div>
-    
     <form id="messageForm" @submit.prevent="handleSubmit">
         <input type="text" id="message" name="name" v-model="message" required placeholder="Écrivez votre message...">
-        <button type="submit">Soumettre</button>
+        
+        <button type="submit" @click="createMessage">Soumettre</button>
     </form>
   </div> 
 </template>
 
 <script>
 import { io } from 'socket.io-client';
-import { fetchRooms } from '../services/topicService.js';
+import { fetchRooms } from '../../services/topicService.js';
+import { createMessage} from '../../services/createMessage.js';
+import { fetchMessagesByForum } from '../../services/messageService.js'
 
 export default {
   name: 'ChatRoom',
@@ -56,16 +59,27 @@ export default {
       socket: null,
       room_id: null,
       rooms_list : null,
-      newMessage: '', 
+      message:'',
       messages: [],
     };
   },
   beforeMount(){
-    const response = fetchRooms();
+    const room_id = "1";
 
-    response.then(result => {
+    this.room_id = room_id
+    const rooms = fetchRooms();
+    rooms.then(result => {
       this.rooms_list = result
+      console.log(this.rooms_list)
     });
+
+    const messages = fetchMessagesByForum(this.room_id)
+    messages.then(result => {
+    console.log('messages : ' +messages)
+
+      this.messages = result
+    });
+
   },
   mounted() {
     document.body.classList.add('bodyClass');
@@ -76,9 +90,7 @@ export default {
       // TODO DECOMMENT
 
       // TODO REMOVE
-      const room_id = "1";
-
-      this.room_id = room_id
+     
       // TODO REMOVE
 
 
@@ -104,11 +116,17 @@ export default {
     // TODO: REMOVE
   },
   methods: {
-    sendMessage() {
-      if (this.newMessage.trim() !== '') {
-        this.socket.emit('message', { room: this.room, message: this.newMessage });
-        this.newMessage = '';
-      }
+    // sendMessage() {
+    //   if (this.newMessage.trim() !== '') {
+    //     this.socket.emit('message', { room: this.room, message: this.newMessage });
+    //     this.newMessage = '';
+    //   }
+    // },
+    async createMessage() {
+      // Appelle la méthode importée ici
+      await createMessage(this.message, this.room_id);
+      this.messages = await fetchMessagesByForum(this.room_id);
+      this.message = '';
     },
     scrollToBottom() {
       const messagesDiv = this.$refs.messages;

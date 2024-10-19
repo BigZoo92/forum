@@ -29,7 +29,7 @@ exports.createMessage = async (req, res) => {
   const { content, room } = req.body;
   const jwtToken = await getAccessToken();
   try {
-    const response = await axios.post(messageApiUrl, { content, room }, {
+    const response = await axios.post(directusApiUrl, { content, room }, {
       headers: { Authorization: `Bearer ${jwtToken}` }
     });
     res.json(response.data);
