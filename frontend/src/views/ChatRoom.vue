@@ -1,6 +1,6 @@
 <template>    
   <div id="room_nav">
-    <router-link :to="{ name: 'IndexRooms' }">
+    <router-link :to="{ name: 'IndexForums' }">
       <button class="back-button" aria-label="Revenir à l'accueil">&#8592;</button>
     </router-link>
     <button class="burger" aria-label="Toggle menu" @click="toggleMenu">&#9776;</button>    

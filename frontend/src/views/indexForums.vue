@@ -10,7 +10,9 @@
             <li class="card__name">{{ room.title }}</li>
             <div style="gap: 25px; display: flex; justify-content: center;">
               <p class="card__date">2 hours ago</p>
-              <button class="button" @click="goToRoom(room.id)">Voir</button>
+              <router-link :to="{ name: 'ChatRoom', params: { id: room.id } }">
+                <button class="button">Voir</button>
+            </router-link>
             </div>
           </div>
         </ul>
