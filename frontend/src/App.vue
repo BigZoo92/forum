@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { fetchUsersById } from '../services/userService';
+import { inviteUserIfMentioned } from './services/sendMail';
 
 export default {
   name: 'App',
@@ -24,7 +24,7 @@ export default {
   },
   async mounted() {
     try {
-      const data = await fetchUsersById("2b2c28f8-5d2f-4d40-8eb1-ac9b02ef1454");
+      const data = await inviteUserIfMentioned('test', 'Salut @test', 'https://example.com/sujet/123');
       this.messages = data;
       console.log(this.messages)
     } catch (err) {
