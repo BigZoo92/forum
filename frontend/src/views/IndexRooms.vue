@@ -4,7 +4,6 @@
       <h1>Forums</h1>
       <button class="button" @click="showModal = true">+</button>
     </div>
-    <!-- Affichage de la liste des chambres -->
     <div class="card__wrapper">
       <ul v-if="rooms_list.length">
         <div class="card__data-flex">
@@ -14,7 +13,6 @@
       <button class="button" @click="goToRoom(room.id)">Voir</button>
     </ul>
   </div>
-  <!-- Modal component -->
   <MyModal v-if="showModal" @close="showModal = false" @submit="handleFormSubmit" />
 </div>
 </template>
@@ -23,7 +21,6 @@
 import MyModal from '../components/MyModal.vue';
 import { fetchRooms } from '../services/topicService';
 import { createRoom } from '../services/createRoom';
-import { fetchRoomsById } from '../services/topicService';
 
 export default {
   name: 'App',
