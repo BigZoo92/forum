@@ -1,6 +1,9 @@
-<template>
+<template>    
   <div id="room_nav">
-    <button class="burger" aria-label="Toggle menu" @click="toggleMenu">&#9776;</button>
+    <router-link :to="{ name: 'IndexRooms' }">
+      <button class="back-button" aria-label="Revenir à l'accueil">&#8592;</button>
+    </router-link>
+    <button class="burger" aria-label="Toggle menu" @click="toggleMenu">&#9776;</button>    
     <span v-for="(room, index) in rooms_list" :key="index" :class="'room-' + (index+1)">
       <h1 v-if="room_id == room.id">{{room.title}}</h1> 
       <ul v-if="room_id != room.id">
@@ -20,20 +23,6 @@
         </div>
         <p class="message__text">{{message.content}}</p>
         </div>
-        <!-- <div class="message__container">
-          <div class="message__infos-user">
-            <p class="message__infos-user__name">User#974456</p>
-            <p class="message__infos-user__date">2 hours ago</p>
-          </div>
-          <p class="message__text">Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte.</p>
-        </div>
-        <div class="message__container">
-          <div class="message__infos-user">
-            <p class="message__infos-user__name">User#974456</p>
-            <p class="message__infos-user__date">2 hours ago</p>
-          </div>
-          <p class="message__text">Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte.</p>
-        </div> -->
     </div>
     <form id="messageForm" @submit.prevent="handleSubmit">
         <input type="text" id="message" name="name" v-model="message" required placeholder="Écrivez votre message...">
@@ -68,7 +57,7 @@ export default {
   },
   beforeMount() {
     this.isLoading = true;
-    const room_id = "1";
+    const room_id = this.$route.params.id ;
 
     this.room_id = room_id;
 
@@ -96,16 +85,6 @@ export default {
     document.body.classList.add('bodyClass');
     this.scrollToBottom();
 
-    // TODO DECOMMENT WHEN ROUTE IS REACTIVE WITH THE ROOM ID
-      // const room_id = this.$route.params.id ;
-      // TODO DECOMMENT
-
-      // TODO REMOVE
-     
-      // TODO REMOVE
-
-
-    // TODO: REMOVE
     this.socket = io('http://localhost:3000');
 
     // Gérer les événements de connexion et déconnexion
@@ -124,15 +103,8 @@ export default {
       console.log(`Message from room: ${message}`);
       this.messages.push(message);
     });
-    // TODO: REMOVE
   },
   methods: {
-    // sendMessage() {
-    //   if (this.newMessage.trim() !== '') {
-    //     this.socket.emit('message', { room: this.room, message: this.newMessage });
-    //     this.newMessage = '';
-    //   }
-    // },
     formatDate(dateString) {
       const messageDate = new Date(dateString);
       const now = new Date();
@@ -230,6 +202,8 @@ html, .bodyClass {
   transition: width 0.3s ease;
   height: 100%;
   width: 250px;
+  justify-content: center; 
+  align-items: center;
 }
 
 #room_nav h1, ul {
@@ -338,6 +312,20 @@ html, .bodyClass {
 @media (max-width: 768px) {
   .message__infos-user__date {
       font-size: 14px;
+  }
+
+  .back-button {
+
+    font-size: 24px;
+    color: white;
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
+    position: fixed;
+    top: 0;
+    margin-top: 10px;
+    z-index: 2;
   }
 
   .message__text {
@@ -460,5 +448,21 @@ html, .bodyClass {
 
 .visible {
     display: block;
+}
+.back-button {
+  width: auto;
+  height: auto;
+  font-size: 24px;
+  font-weight: 200;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 24px;
+  margin-bottom: 30px;
+
+  z-index: 2;
+  text-align: center;
+  align-items: center;
 }
 </style>
