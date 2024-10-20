@@ -12,7 +12,7 @@
   </div>
   <div class="main">
     <div id="scroll" ref="messages">
-      {{ messages }}
+      <div v-if="isLoading" class="loader">Chargement...</div>
         <div  v-for="(message, index) in messages" :key="index" class="message__container">
         <div class="message__infos-user">
           <p class="message__infos-user__name">{{message.username}}</p>
@@ -49,7 +49,7 @@ import { fetchRooms } from '../services/topicService.js';
 import { createMessage} from '../services/createMessage.js';
 import { fetchMessagesByForum } from '../services/messageService.js'
 import { fetchUsersById } from '../services/userService.js'
-
+import { useToast } from "vue-toastification";
 
 export default {
   name: 'ChatRoom',
@@ -63,9 +63,11 @@ export default {
       rooms_list : null,
       message:'',
       messages: [],
+      isLoading: false,
     };
   },
   beforeMount() {
+    this.isLoading = true;
     const room_id = "1";
 
     this.room_id = room_id;
@@ -86,9 +88,11 @@ export default {
       }));
 
       this.messages = updatedMessages;
+      this.isLoading = false;
     });
   },
   mounted() {
+    this.toast = useToast();
     document.body.classList.add('bodyClass');
     this.scrollToBottom();
 
@@ -147,11 +151,17 @@ export default {
     },
 
     async createMessage() {
-      // Appelle la méthode importée ici
-      await createMessage(this.message, this.room_id);
-      this.messages = await fetchMessagesByForum(this.room_id);
-      console.log(this.messages)
-      this.message = '';
+      this.isLoading = true; 
+      try {
+        await createMessage(this.message, this.room_id);
+        this.messages = await fetchMessagesByForum(this.room_id);
+        this.message = '';        
+        this.toast.success('Message envoyé avec succès !');
+      } catch (error) {
+        this.toast.error('Erreur lors de l\'envoi du message.');
+      }finally {
+        this.isLoading = false; 
+      }
     },
     scrollToBottom() {
       const messagesDiv = this.$refs.messages;
@@ -159,7 +169,6 @@ export default {
     },
   
   beforeUnmount() {
-    // Déconnecter proprement lorsque le composant est détruit
     if (this.socket) {
       this.socket.disconnect();
     }
@@ -192,6 +201,14 @@ export default {
 html, .bodyClass {
   height: 100%;
   margin: 0;
+}
+
+.loader {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+  padding: 20px;
 }
 
 .bodyClass {
