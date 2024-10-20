@@ -16,6 +16,7 @@
       </ul>
     </div>
     <MyModal v-if="showModal" @close="showModal = false" @submit="handleFormSubmit" />
+    <router-view />
   </div>
 </template>
 
