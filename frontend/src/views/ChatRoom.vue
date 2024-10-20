@@ -87,7 +87,7 @@ export default {
     document.body.classList.add('bodyClass');
     this.scrollToBottom();
 
-    this.socket = io('http://localhost:3000');
+    this.socket = io(process.env.VUE_APP_BACKEND_URL || '');
 
     // Gérer les événements de connexion et déconnexion
     this.socket.on('connect', () => {

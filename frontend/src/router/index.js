@@ -3,7 +3,7 @@ import ChatRoom from '../views/ChatRoom.vue'
 import IndexForums from '../views/indexForums.vue'
 
 const routes = [
-  { path: '/', name: 'App', component: IndexForums },
+  { path: '/', name: 'IndexForums', component: IndexForums },
   { path: '/chat-room/:id', name: 'ChatRoom', component: ChatRoom }
 ]
 

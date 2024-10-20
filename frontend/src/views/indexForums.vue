@@ -26,7 +26,7 @@
   import { createRoom } from '../services/createRoom';
   
   export default {
-    name: 'App',
+    name: 'IndexForums',
     components: {
       MyModal
     },
