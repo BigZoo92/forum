@@ -62,7 +62,7 @@ export default {
     // goToRoom(id) {
     //   this.getRoomById(id);
     // }
-  },
+  // },
     async handleFormSubmit(formData) {
       try {
         await createRoom(formData);

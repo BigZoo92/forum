@@ -31,13 +31,29 @@ const users = [
     res.json(user);
   };
 
-  exports.getUsersById = (req, res) => {
-    const userId = parseInt(req.params.userId);
-    const user = users.find(user => user.id === userId);
-    if (!user) {
-      return res.status(404).json({ error: 'Utilisateur non trouvé' });
+  exports.getUsersById = async (req, res) => {
+    const userId = req.params.userId;
+  
+    const url = `https://directus-ucmn.onrender.com/users?filter[id][_eq]=${userId}`;
+  
+    try {
+      const response = await fetch(url);      
+      if (!response.ok) {
+        return res.status(response.status).json({ error: 'Erreur lors de la récupération de l\'utilisateur' });
+      }
+  
+      const data = await response.json();
+  
+      if (data && data.data && data.data.length > 0) {
+        return res.json(data.data[0]); 
+      } else {
+        return res.status(404).json({ error: 'Utilisateur non trouvé' });
+      }
+  
+    } catch (error) {
+      console.error('Erreur lors de la récupération de l\'utilisateur :', error);
+      res.status(500).json({ error: 'Erreur serveur lors de la récupération de l\'utilisateur' });
     }
-    res.json(users);
   };
 
 
