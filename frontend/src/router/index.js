@@ -5,6 +5,7 @@ import IndexRooms from '../views/IndexRooms.vue'
 const routes = [
   { path: '/', name: 'IndexRooms', component: IndexRooms },
   { path: '/chat-room/1', name: 'ChatRoom', component: ChatRoom }
+  // { path: '/chat-room/:id', name: 'ChatRoom', component: Chatroom },
 ]
 
 const router = createRouter({

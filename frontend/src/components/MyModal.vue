@@ -10,9 +10,10 @@
           <input type="text" v-model="formData.name" required />
         </div>
 
-        <div>
+        <!-- <div>
           <label for="message">Type your message here:</label>
-          <textarea v-model="formData.message" required></textarea>        </div>
+          <textarea v-model="formData.message" required></textarea>
+        </div> -->
 
         <button class="button" type="submit">Submit</button>
         <button type="button" @click="$emit('close')">Close</button>
@@ -40,9 +41,7 @@ export default {
 };
 </script>
 
-<!-- Optional: Styling for the modal -->
 <style scoped>
-
 h2 {
   color: #ff6027;
 }
@@ -59,7 +58,6 @@ h2 {
   z-index: 1000; /* Ensure it stays on top of other content */
 }
 
-/* Modal content styling */
 .modal-content {
   background-color: #2C353D;
   padding: 30px;
@@ -70,12 +68,10 @@ h2 {
   position: relative;
 }
 
-/* Form styling */
 form div {
-  margin-bottom: 20px; /* Space between input fields */
+  margin-bottom: 20px;
 }
 
-/* Label styling */
 label {
   font-weight: bold;
   display: block;
@@ -85,6 +81,7 @@ label {
 
 input[type="text"],
 textarea {
+  color: black;
   width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
@@ -101,12 +98,12 @@ textarea {
 
 input[type="text"]:focus,
 textarea:focus {
-  border-color: #FF6934; /* Blue border on focus */
+  border-color: #FF6934;
   outline: none;
 }
 
 button[type="submit"] {
-  background-color: #FF6934; /* Blue background */
+  background-color: #FF6934;
   color: white;
   padding: 12px 20px;
   border: none;
@@ -134,7 +131,6 @@ button[type="button"] {
   width: 100%;
 }
 
-/* Close button hover effect */
 button[type="button"]:hover {
   background-color: #bbb;
 }
