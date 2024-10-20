@@ -6,7 +6,6 @@ export async function fetchRooms() {
     if (!response.ok) {
       throw new Error('Erreur lors de la récupération des rooms');
     }
-    console.log(response)
     return await response.json();
   } catch (error) {
     console.error('Erreur :', error);
