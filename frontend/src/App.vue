@@ -1,12 +1,13 @@
 <template>
   <div id="app">
-    <div>
       <!-- As a link -->
-      <b-navbar variant="faded" type="light">
-        <b-navbar-brand href="#">Navbar bonjour</b-navbar-brand>
-      </b-navbar>
-    </div>
-    <router-view></router-view>
+      <div>
+  <!-- As a link -->
+  <b-navbar variant="dark" type="dark">
+    <b-navbar-brand href="#">BootstrapVue</b-navbar-brand>
+  </b-navbar>
+</div>
+      <router-view></router-view>
   </div>
 </template>
 
@@ -33,3 +34,9 @@ export default {
   }
 }
 </script>
+
+<style>
+  body {
+    background-color: #1E252B;
+  }
+</style>
