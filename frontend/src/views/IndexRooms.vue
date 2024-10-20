@@ -32,15 +32,14 @@ export default {
   }
 };
 </script>
-<style scoped>
 
+<style scoped>
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'Source Sans Pro', sans-serif;
   color: #F7F7F7;
-
 }
 
 body {

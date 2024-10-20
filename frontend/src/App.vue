@@ -1,6 +1,11 @@
 <template>
   <div id="app">
-    <h1>Navbar</h1>
+    <div>
+      <!-- As a link -->
+      <b-navbar variant="faded" type="light">
+        <b-navbar-brand href="#">Navbar bonjour</b-navbar-brand>
+      </b-navbar>
+    </div>
     <router-view></router-view>
   </div>
 </template>
