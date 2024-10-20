@@ -21,9 +21,9 @@
   
   
   <script>
-  import MyModal from './components/MyModal.vue';
-  import { fetchRooms } from './services/topicService';
-  import { createRoom } from './services/createRoom';
+  import MyModal from '../components/MyModal.vue';
+  import { fetchRooms } from '../services/topicService';
+  import { createRoom } from '../services/createRoom';
   
   export default {
     name: 'App',
