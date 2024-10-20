@@ -124,14 +124,17 @@ export default {
       }
     },
     messageContainsMention(content) {
+      if(!content) return 
       return content.includes('@');
     },
 
     messageContainsSelfMention(content) {
+      if(!content) return 
       return content.includes(`@${this.currentUser}`);
     },
 
     highlightMentions(content) {
+      if(!content) return 
       const mentionRegex = /@(\w+)/g;
       return content.replace(mentionRegex, '<span class="highlight-mention">@$1</span>');
     },
