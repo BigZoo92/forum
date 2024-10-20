@@ -16,7 +16,7 @@
   <div class="main">
     <div id="scroll" ref="messages">
       <div v-if="isLoading" class="loader">Chargement...</div>
-        <div  v-for="(message, index) in messages" :key="index" class="message__container">
+        <div  v-for="(message, index) in messages" :key="index" :class="['message__container', { 'highlight-mention': messageContainsMention(message.content), 'highlight-self': messageContainsSelfMention(message.content) }]">
         <div class="message__infos-user">
           <p class="message__infos-user__name">{{message.username}}</p>
           <p class="message__infos-user__date">{{formatDate(message.date_created)}}</p>
@@ -39,6 +39,7 @@ import { createMessage} from '../services/createMessage.js';
 import { fetchMessagesByForum } from '../services/messageService.js'
 import { fetchUsersById } from '../services/userService.js'
 import { useToast } from "vue-toastification";
+import { inviteUserIfMentioned } from '../services/sendMail.js';
 
 export default {
   name: 'ChatRoom',
@@ -53,6 +54,7 @@ export default {
       message:'',
       messages: [],
       isLoading: false,
+      currentUser: 'CurrentUsername',
     };
   },
   beforeMount() {
@@ -121,10 +123,23 @@ export default {
         return `${diffDays} days ago`;
       }
     },
+    messageContainsMention(content) {
+      return content.includes('@');
+    },
+
+    messageContainsSelfMention(content) {
+      return content.includes(`@${this.currentUser}`);
+    },
+
+    highlightMentions(content) {
+      const mentionRegex = /@(\w+)/g;
+      return content.replace(mentionRegex, '<span class="highlight-mention">@$1</span>');
+    },
 
     async createMessage() {
       this.isLoading = true; 
       try {
+        await inviteUserIfMentioned(this.currentUser, this.message, 'http://example.com'); 
         await createMessage(this.message, this.room_id);
         this.messages = await fetchMessagesByForum(this.room_id);
         this.message = '';        
@@ -173,6 +188,23 @@ export default {
 html, .bodyClass {
   height: 100%;
   margin: 0;
+}
+
+.highlight-mention {
+  color: #ff652f;
+  font-weight: bold;
+}
+
+.highlight-self {
+  background-color: yellow;
+}
+
+.message__container.highlight-mention {
+  border-left: 4px solid #ff652f;
+}
+
+.message__container.highlight-self {
+  background-color: #ffe5b4;
 }
 
 .loader {
