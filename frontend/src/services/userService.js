@@ -1,8 +1,8 @@
-const API_URL = 'http://localhost:3000/api/users';
+const backendUrl = process.env.VUE_APP_BACKEND_URL;
 
 export async function fetchUsersById(userId) {
   try {
-    const response = await fetch(`${API_URL}/${userId}`);
+    const response = await fetch(`${backendUrl || '/'}api/users${userId}`);
     if (!response.ok) {
       throw new Error('Erreur lors de la récupération des utilisateurs');
     }

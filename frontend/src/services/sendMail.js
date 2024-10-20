@@ -1,9 +1,11 @@
+const backendUrl = process.env.VUE_APP_BACKEND_URL;
+
 export async function inviteUserIfMentioned(sender, message, topicLink) {
   const mentionedUser = message.match(/@(\w+)/);
   
   if (mentionedUser) {
     const username = mentionedUser[1];
-      const inviteResponse = await fetch('http://localhost:3000/api/users/invite', {
+      const inviteResponse = await fetch(`${backendUrl || '/'}api/users/invite`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
