@@ -44,7 +44,7 @@
 
 <script>
 import { io } from 'socket.io-client';
-import { fetchRooms } from '../../services/topicService.js';
+import { fetchRooms } from '../services/topicService.js';
 
 export default {
   name: 'ChatRoom',

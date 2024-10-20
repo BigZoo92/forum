@@ -17,7 +17,6 @@ async function getAccessToken() {
         });
 
         const data = await response.json();
-        console.log(data)
         if (response.ok) {
             return data.data.access_token;
         } else {

@@ -1,6 +1,8 @@
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 const path = require('path'); 
+const { getUserByUsername } = require('../utils/searchUser');
+
 
 const users = [
     { id: 1, email: 'user1@example.com', name: 'User One' },
@@ -45,30 +47,35 @@ const transporter = nodemailer.createTransport({
   port: 465,
   secure: true, 
   auth: {
-    user: process.env.MAIL,
-    pass: process.env.MDP_SECRET,
+    user:"moodframe.pro@gmail.com",
+    pass: "ndil hpdz pdcv jnok",
   },
 });
 
 
-exports.sendInvitationEmail = async(user1, user2, topicLink) => {
-  const htmlTemplatePath = path.resolve(__dirname, '../templates/mail/mail.html');
+
+
+const sendInvitationEmail = async(user1, user2, topicLink) => {
+  const htmlTemplatePath = path.resolve(__dirname, '../templates/mail.html');
   const htmlTemplate = fs.readFileSync(htmlTemplatePath, 'utf8');
+
+  const sender = await getUserByUsername(user1)
+  const usernameSender = sender.username
+  const received = await getUserByUsername(user2)
+  const usernameReceived = received.username
   
   const emailHTML = htmlTemplate
-    .replace('{{user1}}', user1)
-    .replace('{{user2}}', user2)
+    .replace('{{user1}}', usernameSender)
+    .replace('{{user2}}', usernameReceived)
     .replace('{{topicLink}}', topicLink);
   
   await transporter.sendMail({
-    from: process.env.MAIL,
-    to: user2,
+    from:"moodframe.pro@gmail.com",
+    to: 'givernaudenzo@gmail.com',
     subject: `${user1} has invited you to a topic`,
     html: emailHTML,
   });
 }
-
-module.exports = { sendInvitationEmail };
 
   
 exports.sendInvite = async (req, res) => {
