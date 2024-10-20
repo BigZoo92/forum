@@ -2,7 +2,7 @@ const backendUrl = process.env.VUE_APP_BACKEND_URL;
 
 export async function fetchRooms() {
   try {
-    const response = await fetch(`${backendUrl}api/rooms`);
+    const response = await fetch(`${backendUrl || '/'}api/rooms`);
     if (!response.ok) {
       throw new Error('Erreur lors de la récupération des rooms');
     }
@@ -15,7 +15,7 @@ export async function fetchRooms() {
 
 export async function fetchRoomsById(topicId) {
   try {
-    const response = await fetch(`${backendUrl}api/rooms/${topicId}`);
+    const response = await fetch(`${backendUrl || '/'}api/rooms/${topicId}`);
     if (!response.ok) {
       throw new Error('Erreur lors de la récupération des rooms');
     }

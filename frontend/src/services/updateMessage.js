@@ -2,7 +2,7 @@ const backendUrl = process.env.VUE_APP_BACKEND_URL;
 
 export async function updateMessage(id, updatedData) {
   try {
-    const response = await fetch(`${backendUrl}api/messages/${id}`, {
+    const response = await fetch(`${backendUrl || '/'}api/messages/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'

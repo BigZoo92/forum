@@ -2,7 +2,7 @@ const backendUrl = process.env.VUE_APP_BACKEND_URL;
 
 export async function createMessage(content, room) { //roomId
   try {
-    const response = await fetch(`${backendUrl}api/messages`, {
+    const response = await fetch(`${backendUrl || '/'}api/messages`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

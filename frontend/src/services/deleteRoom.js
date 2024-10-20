@@ -1,6 +1,6 @@
 export async function deleteRoom(id) {
     try {
-      const response = await fetch(`${backendUrl}api/rooms/${id}`, {
+      const response = await fetch(`${backendUrl || '/'}api/rooms/${id}`, {
         method: 'DELETE'
       });
       if (!response.ok) {

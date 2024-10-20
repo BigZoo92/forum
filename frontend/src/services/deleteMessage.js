@@ -2,7 +2,7 @@ const backendUrl = process.env.VUE_APP_BACKEND_URL;
 
 export async function deleteMessage(id) {
   try {
-    const response = await fetch(`${backendUrl}api/messages/${id}`, {
+    const response = await fetch(`${backendUrl || '/'}api/messages/${id}`, {
       method: 'DELETE',
     });
     if (!response.ok) {

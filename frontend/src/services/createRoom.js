@@ -1,8 +1,10 @@
 const backendUrl = process.env.VUE_APP_BACKEND_URL;
 
 export async function createRoom(title) {
+  
+
     try {
-      const response = await fetch(`${backendUrl}api/rooms`, {
+      const response = await fetch(`${backendUrl || '/'}api/rooms`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
