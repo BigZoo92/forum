@@ -13,14 +13,14 @@
   <div class="main">
     <div id="scroll" ref="messages">
       {{ messages }}
-        <!-- <div class="message__container">
+        <div  v-for="(message, index) in messages" :key="index" class="message__container">
         <div class="message__infos-user">
-          <p class="message__infos-user__name">User#974456</p>
-          <p class="message__infos-user__date">2 hours ago</p>
+          <p class="message__infos-user__name">{{message.username}}</p>
+          <p class="message__infos-user__date">{{formatDate(message.date_created)}}</p>
         </div>
-        <p class="message__text">Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte.</p>
+        <p class="message__text">{{message.content}}</p>
         </div>
-        <div class="message__container">
+        <!-- <div class="message__container">
           <div class="message__infos-user">
             <p class="message__infos-user__name">User#974456</p>
             <p class="message__infos-user__date">2 hours ago</p>
@@ -45,9 +45,11 @@
 
 <script>
 import { io } from 'socket.io-client';
-import { fetchRooms } from '../../services/topicService.js';
-import { createMessage} from '../../services/createMessage.js';
-import { fetchMessagesByForum } from '../../services/messageService.js'
+import { fetchRooms } from '../services/topicService.js';
+import { createMessage} from '../services/createMessage.js';
+import { fetchMessagesByForum } from '../services/messageService.js'
+import { fetchUsersById } from '../services/userService.js'
+
 
 export default {
   name: 'ChatRoom',
@@ -63,23 +65,28 @@ export default {
       messages: [],
     };
   },
-  beforeMount(){
+  beforeMount() {
     const room_id = "1";
 
-    this.room_id = room_id
+    this.room_id = room_id;
+
     const rooms = fetchRooms();
     rooms.then(result => {
-      this.rooms_list = result
-      console.log(this.rooms_list)
+      this.rooms_list = result;
     });
 
-    const messages = fetchMessagesByForum(this.room_id)
-    messages.then(result => {
-    console.log('messages : ' +messages)
+    const messages = fetchMessagesByForum(this.room_id);
+    messages.then(async (result) => {
+      const updatedMessages = await Promise.all(result.map(async (message) => {
+        const user = await fetchUsersById(message.user_created);
+        return {
+          ...message,
+          username: user.username
+        };
+      }));
 
-      this.messages = result
+      this.messages = updatedMessages;
     });
-
   },
   mounted() {
     document.body.classList.add('bodyClass');
@@ -122,10 +129,28 @@ export default {
     //     this.newMessage = '';
     //   }
     // },
+    formatDate(dateString) {
+      const messageDate = new Date(dateString);
+      const now = new Date();
+      const diffMs = now - messageDate; 
+      const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+
+      if (diffHours < 1) {
+        const diffMinutes = Math.floor(diffMs / (1000 * 60));
+        return `${diffMinutes} minutes ago`;
+      } else if (diffHours < 24) {
+        return `${diffHours} hours ago`;
+      } else {
+        const diffDays = Math.floor(diffHours / 24);
+        return `${diffDays} days ago`;
+      }
+    },
+
     async createMessage() {
       // Appelle la méthode importée ici
       await createMessage(this.message, this.room_id);
       this.messages = await fetchMessagesByForum(this.room_id);
+      console.log(this.messages)
       this.message = '';
     },
     scrollToBottom() {
